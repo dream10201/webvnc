@@ -28,8 +28,8 @@ RUN apt update \
 # novnc
     && apt install --no-install-recommends -y python3-numpy libxshmfence1 libasound2 libxcvt0 libgbm1 \
     && mkdir -p "${NO_VNC_HOME}/utils/websockify" \
-    && wget --no-check-certificate -qO- "$(curl -s "https://api.github.com/repos/novnc/noVNC/releases/latest" | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}" \
-    && wget --no-check-certificate -qO- "$(curl -s "https://api.github.com/repos/novnc/websockify/releases/latest" | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}/utils/websockify" \
+    && wget --no-check-certificate -qO- "$(curl -s https://api.github.com/repos/novnc/noVNC/releases/latest | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}" \
+    && wget --no-check-certificate -qO- "$(curl -s https://api.github.com/repos/novnc/websockify/releases/latest | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}/utils/websockify" \
     && chmod +x -v "${NO_VNC_HOME}/utils/novnc_proxy" \
     && sed -i '1s/^/if(localStorage.getItem("resize") == null){localStorage.setItem("resize","remote");}\n/' "${NO_VNC_HOME}/app/ui.js" \
     && rm -rf /usr/share/doc /usr/share/man \
