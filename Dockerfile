@@ -1,26 +1,37 @@
 FROM debian:stable-slim AS base
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive
+    DEBIAN_FRONTEND=noninteractive \
+    G_SLICE=always-malloc \
+    NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim
 RUN apt update \
-    && apt install --no-install-recommends -y ca-certificates x11-xkb-utils xkbset wget curl unzip locales fonts-noto-cjk \
+    && apt install --no-install-recommends -y \
+    ca-certificates \
+    x11-xkb-utils \
+    xkbset \
+    wget \
+    curl \
+    unzip \
+    locales \
+    fonts-noto-cjk \
+# desktop
+    pcmanfm \
+    tint2 \
+    openbox \
+    xauth \
+    xinit \
     && locale-gen en_US.UTF-8 \
-    && echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-FROM base AS desktop
-ENV G_SLICE=always-malloc
-RUN apt install --no-install-recommends -y pcmanfm tint2 openbox xauth xinit
-
-FROM desktop AS tigervnc
-RUN wget --no-check-certificate -qO- https://sourceforge.net/projects/tigervnc/files/stable/1.15.0/tigervnc-1.15.0.x86_64.tar.gz | tar xz --strip 1 -C /
-
-
-FROM tigervnc AS novnc
-ENV NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim
-RUN apt install --no-install-recommends -y python3-numpy libxshmfence1 libasound2 libxcvt0 libgbm1 \
+    && echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
+# tigervnc
+    && export TIGERVNC_LATEST_VERSION=$(curl -sL "https://sourceforge.net/projects/tigervnc/files/stable/" | grep -oP "/projects/tigervnc/files/stable/[0-9.]+" | cut -d'/' -f6 | sort -V | tail -n 1) \
+    && wget --no-check-certificate -qO- "https://sourceforge.net/projects/tigervnc/files/stable/${TIGERVNC_LATEST_VERSION}/tigervnc-${TIGERVNC_LATEST_VERSION}.x86_64.tar.gz" | tar xz --strip 1 -C / \
+# novnc
+    && apt install --no-install-recommends -y python3-numpy libxshmfence1 libasound2 libxcvt0 libgbm1 \
     && mkdir -p "${NO_VNC_HOME}/utils/websockify" \
-    && wget --no-check-certificate -qO- "https://github.com/novnc/noVNC/archive/v1.6.0.tar.gz" | tar xz --strip 1 -C "${NO_VNC_HOME}" \
-    && wget --no-check-certificate -qO- "https://github.com/novnc/websockify/archive/v0.13.0.tar.gz" | tar xz --strip 1 -C "${NO_VNC_HOME}/utils/websockify" \
+    && wget --no-check-certificate -qO- "$(curl -s "https://api.github.com/repos/novnc/noVNC/releases/latest" | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}" \
+    && wget --no-check-certificate -qO- "$(curl -s "https://api.github.com/repos/novnc/websockify/releases/latest" | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}/utils/websockify" \
     && chmod +x -v "${NO_VNC_HOME}/utils/novnc_proxy" \
     && sed -i '1s/^/if(localStorage.getItem("resize") == null){localStorage.setItem("resize","remote");}\n/' "${NO_VNC_HOME}/app/ui.js" \
-    && rm -rf /usr/share/doc /usr/share/man
+    && rm -rf /usr/share/doc /usr/share/man \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
