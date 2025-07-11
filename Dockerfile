@@ -9,6 +9,7 @@ RUN apt update \
     ca-certificates \
     x11-xkb-utils \
     xkbset \
+    jq \
     wget \
     curl \
     unzip \
