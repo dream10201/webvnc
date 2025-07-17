@@ -1,4 +1,4 @@
-FROM debian:stable-slim AS base
+FROM debian:stable-slim
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive \
@@ -6,21 +6,9 @@ ENV LANG=C.UTF-8 \
     NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim
 RUN apt update \
     && apt install --no-install-recommends -y \
-    ca-certificates \
-    x11-xkb-utils \
-    xkbset \
-    jq \
-    wget \
-    curl \
-    unzip \
-    locales \
-    fonts-noto-cjk \
+    ca-certificates x11-xkb-utils xkbset jq wget curl unzip locales fonts-noto-cjk \
 # desktop
-    pcmanfm \
-    tint2 \
-    openbox \
-    xauth \
-    xinit \
+    pcmanfm tint2 openbox xauth xinit \
     && locale-gen en_US.UTF-8 \
     && echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
 # tigervnc
@@ -31,7 +19,7 @@ RUN apt update \
     && mkdir -p "${NO_VNC_HOME}/utils/websockify" \
     && wget --no-check-certificate -qO- "$(curl -s https://api.github.com/repos/novnc/noVNC/releases/latest | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}" \
     && wget --no-check-certificate -qO- "$(curl -s https://api.github.com/repos/novnc/websockify/releases/latest | jq -r '.tarball_url')" | tar xz --strip 1 -C "${NO_VNC_HOME}/utils/websockify" \
-    && chmod +x -v "${NO_VNC_HOME}/utils/novnc_proxy" \
+    && chmod +x "${NO_VNC_HOME}/utils/novnc_proxy" \
     && sed -i '1s/^/if(localStorage.getItem("resize") == null){localStorage.setItem("resize","remote");}\n/' "${NO_VNC_HOME}/app/ui.js" \
     && rm -rf /usr/share/doc /usr/share/man \
     && apt-get clean \
