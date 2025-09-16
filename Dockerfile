@@ -7,6 +7,7 @@ ENV LANG=C.UTF-8 \
 RUN apt update \
     && apt install --no-install-recommends -y \
     ca-certificates x11-xkb-utils xkbset jq wget curl unzip locales fonts-noto-cjk \
+    libnss3 libxss1 \
     libxtst6 xdg-utils libsecret-1-0 libnotify4 \
     fonts-wqy-zenhei fonts-wqy-microhei \
 # desktop
