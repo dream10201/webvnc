@@ -12,7 +12,11 @@ RUN apt update \
     fonts-wqy-zenhei fonts-wqy-microhei \
 # desktop
     pcmanfm tint2 openbox xauth xinit \
-    && locale-gen en_US.UTF-8 \
+    && sed -i -e 's|^# en_US.UTF-8 UTF-8|en_US.UTF-8 UTF-8|' /etc/locale.gen \
+    && sed -i -e 's|^# zh_TW.UTF-8 UTF-8|zh_TW.UTF-8 UTF-8|' /etc/locale.gen \
+    && sed -i -e 's|^# zh_CN.UTF-8 UTF-8|zh_CN.UTF-8 UTF-8|' /etc/locale.gen \
+    && sed -i -e 's|^# zh_HK.UTF-8 UTF-8|zh_HK.UTF-8 UTF-8|' /etc/locale.gen \
+    && locale-gen \
     && echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
 # tigervnc
     && export TIGERVNC_LATEST_VERSION=$(curl -sL "https://sourceforge.net/projects/tigervnc/files/stable/" | grep -oP "/projects/tigervnc/files/stable/[0-9.]+" | cut -d'/' -f6 | sort -V | tail -n 1) \
