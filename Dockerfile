@@ -5,6 +5,7 @@ ENV LANG=C.UTF-8 \
     G_SLICE=always-malloc \
     NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim \
     HOME=/root \
+    XDG_CONFIG_HOME="/root/.config" \
     TINT2_CONF="/root/.config/tint2/tint2rc"
 RUN apt update \
     && apt install --no-install-recommends -y \
