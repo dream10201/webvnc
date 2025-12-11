@@ -3,8 +3,8 @@ ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive \
     G_SLICE=always-malloc \
-    NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim
-    HOME=/root
+    NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim \
+    HOME=/root \
     TINT2_CONF="/root/.config/tint2/tint2rc"
 RUN apt update \
     && apt install --no-install-recommends -y \
