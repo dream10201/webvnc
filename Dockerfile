@@ -12,6 +12,56 @@ RUN apt update \
     fonts-wqy-zenhei fonts-wqy-microhei \
 # desktop
     pcmanfm tint2 openbox xauth xinit \
+# env
+    && export HOME=${HOME:-/root} \
+    && export XDG_CONFIG_HOME="${HOME}/.config" \
+    && mkdir -p "${HOME}/.vnc" \
+    "${HOME}/.config/tint2" \
+    "${HOME}/.config/pcmanfm/default" \
+    "${HOME}/Desktop" \
+    "${HOME}/Templates" \
+    && touch "${HOME}/.Xauthority" \
+    TINT2_CONF="${HOME}/.config/tint2/tint2rc" \
+    && cat > "$TINT2_CONF" <<EOF
+    panel_items = TSC
+    panel_size = 100% 30
+    panel_margin = 0 0
+    panel_padding = 0 0 0
+    panel_background_id = 1
+    wm_menu = 1
+    panel_dock = 0
+    panel_layer = top
+    rounded = 0
+    border_width = 0
+    background_color = #282c34 100
+    border_color = #ffffff 0
+    taskbar_mode = single_desktop
+    taskbar_padding = 5 0 5
+    taskbar_background_id = 0
+    taskbar_active_background_id = 2
+    task_icon_asb = 100 0 0
+    rounded = 2
+    border_width = 0
+    background_color = #3e4452 100
+    border_color = #ffffff 0
+    time1_format = %H:%M
+    time1_font = Sans 10
+    time2_format = %Y-%m-%d
+    time2_font = Sans 8
+    clock_font_color = #ffffff 100
+    clock_padding = 10 0
+    clock_background_id = 0
+    systray_padding = 5 0 5
+    systray_icon_size = 20
+    systray_background_id = 0
+    EOF \
+    && cat > "${HOME}/.config/pcmanfm/default/desktop-items-0.conf" <<EOF
+    [*]
+    wallpaper_mode=color
+    desktop_bg=#282c34
+    desktop_fg=#ffffff
+    show_wm_menu=1
+    EOF \
     && sed -i -e 's|^# en_US.UTF-8 UTF-8|en_US.UTF-8 UTF-8|' /etc/locale.gen \
     && sed -i -e 's|^# zh_TW.UTF-8 UTF-8|zh_TW.UTF-8 UTF-8|' /etc/locale.gen \
     && sed -i -e 's|^# zh_CN.UTF-8 UTF-8|zh_CN.UTF-8 UTF-8|' /etc/locale.gen \
