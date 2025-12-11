@@ -55,14 +55,14 @@ clock_background_id = 0
 systray_padding = 5 0 5
 systray_icon_size = 20
 systray_background_id = 0
-EOF
+EOF \
     && cat > "${HOME}/.config/pcmanfm/default/desktop-items-0.conf" <<'EOF'
 [*]
 wallpaper_mode=color
 desktop_bg=#282c34
 desktop_fg=#ffffff
 show_wm_menu=1
-EOF
+EOF \
     && sed -i -e 's|^# en_US.UTF-8 UTF-8|en_US.UTF-8 UTF-8|' /etc/locale.gen \
     && sed -i -e 's|^# zh_TW.UTF-8 UTF-8|zh_TW.UTF-8 UTF-8|' /etc/locale.gen \
     && sed -i -e 's|^# zh_CN.UTF-8 UTF-8|zh_CN.UTF-8 UTF-8|' /etc/locale.gen \
