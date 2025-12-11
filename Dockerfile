@@ -4,9 +4,9 @@ ENV LANG=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive \
     G_SLICE=always-malloc \
     NO_VNC_HOME=/usr/share/usr/local/share/noVNCdim \
-    HOME=/root \
-    XDG_CONFIG_HOME="/root/.config" \
-    TINT2_CONF="/root/.config/tint2/tint2rc"
+    HOME=/opt \
+    XDG_CONFIG_HOME="/opt/.config" \
+    TINT2_CONF="/opt/.config/tint2/tint2rc"
 RUN apt update \
     && apt install --no-install-recommends -y \
     ca-certificates x11-xkb-utils xkbset jq wget curl unzip locales fonts-noto-cjk \
@@ -43,5 +43,5 @@ RUN apt update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY tint2rc /root/.config/tint2/tint2rc
-COPY desktop-items-0.conf /root/.config/pcmanfm/default/desktop-items-0.conf
+COPY tint2rc ${HOME}/.config/tint2/tint2rc
+COPY desktop-items-0.conf ${HOME}/.config/pcmanfm/default/desktop-items-0.conf
